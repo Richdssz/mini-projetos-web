@@ -1,0 +1,41 @@
+name: Deploy to GitHub Pages
+
+on:
+  # Dispara o deploy sempre que houver um push na branch main
+  push:
+    branches: ["main"]
+  # Permite rodar o workflow manualmente na aba Actions
+  workflow_dispatch:
+
+# Define as permissões necessárias
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: "pages"
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Configurar o GitHub Pages
+        uses: actions/configure-pages@v5
+
+      - name: Fazer upload dos arquivos
+        uses: actions/upload-pages-artifact@v3
+        with:
+          # O '.' significa que vai pegar a pasta raiz e todas as subpastas
+          path: '.'
+
+      - name: Fazer o Deploy
+        id: deployment
+        uses: actions/deploy-pages@v4
