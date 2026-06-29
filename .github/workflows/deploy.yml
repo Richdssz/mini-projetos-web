@@ -30,6 +30,9 @@ jobs:
       - name: Configurar o GitHub Pages
         uses: actions/configure-pages@v5
 
+      - name: Criar arquivo .nojekyll
+        run: touch .nojekyll
+
       - name: Fazer upload dos arquivos
         uses: actions/upload-pages-artifact@v3
         with:
